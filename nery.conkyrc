@@ -1,0 +1,125 @@
+conky.config = {
+    own_window = true,
+    own_window_type = 'normal',
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    own_window_class = 'Conky',
+    own_window_title = 'Nery Conky',
+    own_window_transparent = true,
+    --## ARGB can be used for real transparency
+    --## NOTE that a composite manager is required for real transparency.
+    --## This option will not work as desired (in most cases) in conjunction with
+    own_window_argb_visual = true,
+
+    --## When ARGB visuals are enabled, this use this to modify the alpha value
+    --## Use: own_window_type normal
+    --## Use: own_window_transparent no
+    --## Valid range is 0-255, where 0 is 0% opacity, and 255 is 100% opacity.
+    own_window_argb_value = 0,
+
+    minimum_width = 390, 
+    minimum_height = 300,
+    maximum_width = 390,
+    gap_x = 85,--## left | right
+    gap_y = 90,--## up | down
+
+    alignment = 'top_left',
+    -- Use Xft (anti-aliased font and stuff)
+    use_xft = true,
+    font = 'Roboto Regular:size=12',
+
+    -- Alpha of Xft font. Must be a value at or between 1 and 0 ###
+    xftalpha = 1,
+    -- Force UTF8? requires XFT ###
+    override_utf8_locale = true,
+
+    uppercase = false,
+    draw_shades = false,--yes
+    default_shade_color = 'white',
+
+    draw_outline = false,-- amplifies text if true
+    default_outline_color = 'white',
+
+    default_color = 'white',-- White
+    color1 = '#bf616a',-- Red
+    color2 = '#a3be8c',-- Green
+    color3 = '#ebcb8b',-- Yellow
+    color4 = '#81a1c1',-- Blue
+    color5 = '#fb7607',-- Orange
+    color6 = '#a20afe',--
+    color7 = '#ffd86d',-- 
+    color8 = '#93c47d',--
+    color9 = '#00ffff',--
+    color0 = '#daa520',--    
+    --###########  End Colour Settings  ####
+    --###########  Borders Section  ########
+    draw_borders = false,
+    -- Stippled borders?
+    stippled_borders = 5,
+    -- border margins
+    border_inner_margin = 40,
+    border_outer_margin = 0,
+    -- border width
+    border_width = 2,
+    -- graph borders
+    draw_graph_borders = true,--no
+    --default_graph_size 15 40
+    --###########  End Borders Secton  #####
+    --###########  Miscellaneous Section  ##
+    -- Boolean value, if true, Conky will be forked to background when started.
+    background = true,
+    -- Adds spaces around certain objects to stop them from moving other things
+    -- around, this only helps if you are using a mono font
+    -- Options: right, left or none
+    use_spacer = 'none',
+
+    -- Default and Minimum size is 256 - needs more for single commands that
+    -- "call" a lot of text IE: bash scripts
+    --text_buffer_size 6144
+
+    -- Subtract (file system) buffers from used memory?
+    no_buffers = true,
+
+    -- change GiB to G and MiB to M
+    short_units = true,
+
+    -- Like it says, ot pads the decimals on % values
+    -- doesn't seem to work since v1.7.1
+    pad_percents = 2,
+
+    -- Imlib2 image cache size, in bytes. Default 4MiB Increase this value if you use
+    -- $image lots. Set to 0 to disable the image cache.
+    -- imlib_cache_size = 0,
+
+    -- Use the Xdbe extension? (eliminates flicker)
+    -- It is highly recommended to use own window with this one
+    -- so double buffer won't be so big.
+    double_buffer = true,
+
+    --  Maximum size of user text buffer, i.e. layout below TEXT line in config file
+    -- (default is 16384 bytes)
+    -- max_user_text 16384
+
+    update_interval = 1,
+};
+
+conky.text = [[
+    ${color1}o ${color} Oi mestre ${execi 60 whoami}
+
+    ${color2}o ${color} Hoje é ${time %A} dia ${time %d do %m de %Y}
+
+    ${color3}o ${color} Temperatura em Salvador: ${execi 1800 ~/.config/conky/nery/res/wheater}
+
+    ${color4}o ${color} ${execi 1800 ~/.config/conky/nery/res/moeda}
+
+    ${color5}o ${color} Porcentagem de uso da CPU: ${cpu}%
+
+    ${color2}o ${color} RAM usada: ${execi 60 free -h | awk '{print $3}' | grep Mi
+}  SSD: ${fs_used_perc}% de uso
+
+     ${execi 60 ~/.config/conky/nery/res/tv}
+
+    ${color9}o ${color} Frase do dia:
+
+${execi 600 ~/.config/conky/nery/res/quote-online}
+    ${color1}o ${color} IN: ${tcp_portmon 1 32767 count} OUT: ${tcp_portmon 32768 61000 count}
+]];
