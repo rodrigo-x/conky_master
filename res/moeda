@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+DOLLAR_TO_BRL_API="https://economia.awesomeapi.com.br/json/last/USD-BRL"
+ERROR_MESSAGE="ERRO ao obter a cotação do dólar."
+
+get_dollar_exchange_rate() {
+    local response
+    response=$(curl -s -X GET "$DOLLAR_TO_BRL_API")
+    local cotacao
+    cotacao=$(echo "$response" | sed -r 's/.*high":"|".*//g')
+    echo "$cotacao"
+}
+
+main() {
+    local cotacao
+    cotacao=$(get_dollar_exchange_rate)
+    
+    if [ -n "$cotacao" ]; then
+        echo "Dólar atual: $cotacao"
+    else
+        echo "$ERROR_MESSAGE" >&2
+    fi
+}
+
+main

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Here i use: https://wttr.in ! Change to your own city! :)
+weather_url="https://wttr.in/Salvador_Bahia\?0QT"
+weather_info=$(wget -q -O - "$weather_url" | grep -e '+' | sed 's/[^0-9]*//g' | cut -c 1-2)
+
+check_temperature() {
+    if [[ $weather_info -gt 20 ]]; then
+        echo "${weather_info}°C"
+    else
+        echo "Clima Frio!!"
+    fi
+}
+
+check_temperature

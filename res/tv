@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+get_program() {
+    local channel_url="$1"
+    local program
+    program=$(curl -s -X GET "$channel_url" |
+        grep 'h2' | head -1 | tr -d '</h2>' | sed 's/^\t*//g')
+    echo "$program"
+}
+
+# Altere pela URL do canal que você desejar ver a programação
+globo_url="https://meuguia.tv/programacao/canal/GRD"
+tcpipoca_url="https://meuguia.tv/programacao/canal/TC1"
+
+programa_um=$(get_program "$globo_url")
+programa_dois=$(get_program "$tcpipoca_url")
+
+# Exibe o canal e a programação
+echo -e " Globo: $programa_um\n"
+echo -e " TCPipoca: $programa_dois"
