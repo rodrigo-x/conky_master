@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+check_url_online() {
+    local url="$1"
+    local response
+    response=$(curl -s -I -X GET "$url")
+    local http_status
+    http_status=$(echo "$response" | grep -i '^HTTP/1\.[01] [23]..')
+
+    if [ -z "$http_status" ]; then
+        echo "A URL não está online ou retornou um status HTTP inválido." >&2
+        exit 1
+    fi
+}
+
 get_program() {
     local channel_url="$1"
     local program
@@ -8,10 +21,15 @@ get_program() {
     echo "$program"
 }
 
-# Altere pela URL do canal que você desejar ver a programação
+# URLs dos canais
 globo_url="https://meuguia.tv/programacao/canal/GRD"
 tcpipoca_url="https://meuguia.tv/programacao/canal/TC1"
 
+# Verifica a URL antes de obter a programação
+check_url_online "$globo_url"
+check_url_online "$tcpipoca_url"
+
+# Obtém a programação dos canais
 programa_um=$(get_program "$globo_url")
 programa_dois=$(get_program "$tcpipoca_url")
 
