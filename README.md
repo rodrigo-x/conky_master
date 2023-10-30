@@ -20,7 +20,7 @@ Weather:
 
 Enjoy!
 
-Features
-weather with forecast
-currency quote
-more..
+## Features
+  - weather with forecast
+  - currency quote
+  - more..
