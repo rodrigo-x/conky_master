@@ -1,4 +1,4 @@
-# Conky configuration file README [![Conky configuration file]
+## Conky configuration
 This is my Conky configuration files.
 
 ![image](https://github.com/rodrigo-x/conky_master/assets/1559845/f2d8f898-1922-4175-bf93-cfaab162fb34)
