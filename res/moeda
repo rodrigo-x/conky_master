@@ -3,6 +3,18 @@
 DOLLAR_TO_BRL_API="https://economia.awesomeapi.com.br/json/last/USD-BRL"
 ERROR_MESSAGE="ERRO ao obter a cotação do dólar."
 
+check_api_status() {
+    local response
+    response=$(curl -s -I -X GET "$DOLLAR_TO_BRL_API")
+    local http_status
+    http_status=$(echo "$response" | grep -i '^HTTP/1\.[01] [23]..')
+    
+    if [ -z "$http_status" ]; then
+        echo "A API não está online ou retornou um status HTTP inválido." >&2
+        exit 1
+    fi
+}
+
 get_dollar_exchange_rate() {
     local response
     response=$(curl -s -X GET "$DOLLAR_TO_BRL_API")
@@ -12,6 +24,8 @@ get_dollar_exchange_rate() {
 }
 
 main() {
+    check_api_status
+    
     local cotacao
     cotacao=$(get_dollar_exchange_rate)
     
