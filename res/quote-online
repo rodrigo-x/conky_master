@@ -5,7 +5,7 @@ get_online_quote() {
     local rand_online=$((1 + RANDOM % num_online_quotes))
     local quote
 
-    quote=$(wget -q -O - "http://www.quotationspage.com/quote/$rand_online.html" |
+    quote=$(curl -s "http://www.quotationspage.com/quote/$rand_online.html" |
         grep -e "<dt>" -e "</dd>" | awk -F'[<>]' '{
             if($2 ~ /dt/)
             { print $3 }
@@ -34,11 +34,15 @@ get_static_quote() {
     echo "${quotes[a]}"
 }
 
-main() {
+is_internet_available() {
+    wget -q --spider http://google.com
+}
+
+fetch_quote() {
     local max_retries=5
     local quote
 
-    if wget -q --spider http://google.com; then
+    if is_internet_available; then
         for ((i = 1; i <= max_retries; i++)); do
             quote=$(get_online_quote)
             if [[ "$quote" != *"ERROR"* ]]; then
@@ -49,11 +53,22 @@ main() {
         quote=$(get_static_quote)
     fi
 
+    echo "$quote"
+}
+
+display_quote() {
+    local quote="$1"
     if [[ "$quote" == *"ERROR"* ]]; then
         echo "Failed to fetch a valid quote."
     else
         echo -e "$quote" | sed 's/n()//g' | xargs -0 echo | fmt -50
     fi
+}
+
+main() {
+    local quote
+    quote=$(fetch_quote)
+    display_quote "$quote"
 }
 
 main
