@@ -6,7 +6,7 @@ This is my Conky configuration files.
 Conky
 
 ## Installation
-- Clone repo `git clone https://github.com/rodrigo-x/conky_master.git ~/.conky`
+- Clone repo `mkdir ~/.conky/nery && git clone https://github.com/rodrigo-x/conky_master.git ~/.conky/nery`
 - Install dependencies (see below)
 
 ### Dependencies
