@@ -107,19 +107,19 @@ conky.text = [[
 
     ${color2}o ${color} Hoje é ${time %A} dia ${time %d do %m de %Y}
 
-    ${color3}o ${color} Temperatura em Salvador: ${execi 1800 ~/.config/conky/nery/res/wheater}
+    ${color3}o ${color} Temperatura em Salvador: ${execi 1800 ~/.config/conky/nery/scripts/wheater}
 
-    ${color4}o ${color} ${execi 1800 ~/.config/conky/nery/res/moeda}
+    ${color4}o ${color} ${execi 1800 ~/.config/conky/nery/scripts/moeda}
 
     ${color5}o ${color} Porcentagem de uso da CPU: ${cpu}%
 
     ${color2}o ${color} RAM usada: ${execi 60 free -h | awk '{print $3}' | grep Mi
 }  SSD: ${fs_used_perc}% de uso
 
-     ${execi 60 ~/.config/conky/nery/res/tv}
+     ${execi 60 ~/.config/conky/nery/scripts/tv}
 
     ${color9}o ${color} Frase do dia:
 
-${execi 600 ~/.config/conky/nery/res/quote-online}
+${execi 600 ~/.config/conky/nery/scripts/quote-online}
     ${color1}o ${color} IN: ${tcp_portmon 1 32767 count} OUT: ${tcp_portmon 32768 61000 count}
 ]];
