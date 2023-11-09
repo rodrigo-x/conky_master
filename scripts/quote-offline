@@ -6,7 +6,7 @@ num_quotes=70
 # Generate a random quote number variable, 'rand'
 rand=$((1 + RANDOM % num_quotes))
 
-case $rand in  #BEGIN CASE
+case $rand in
     1) quote="Living to learn, learning to live. (Erik Dubois)";;
     2) quote="The Linux philosophy is 'Laugh in the face of danger'. Oops! Wrong One. 'Do it yourself'. Yes, that's it.  (Linus Torvalds)";;
     3) quote="One of the main causes of the fall of the Roman Empire was that, lacking zero, they had no way to indicate successful termination of their C programs. (Robert Firth)";;
