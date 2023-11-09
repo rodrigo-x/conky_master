@@ -7,9 +7,8 @@ weather_info=$(wget -q -O - "$weather_url" | grep -e '+' | sed 's/[^0-9]*//g' | 
 check_temperature() {
     if [[ $weather_info -gt 20 ]]; then
         echo "${weather_info}°C"
-    else
-        echo "Clima Frio!!"
     fi
+    echo "Clima Frio!!"
 }
 
 check_temperature
