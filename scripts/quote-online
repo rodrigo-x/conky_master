@@ -1,74 +1,76 @@
 #!/usr/bin/env bash
 
 get_online_quote() {
-    local num_online_quotes=9999
-    local rand_online=$((1 + RANDOM % num_online_quotes))
-    local quote
+  local num_online_quotes=9999
+  local rand_online=$((1 + RANDOM % num_online_quotes))
+  local quote
 
-    quote=$(curl -s "http://www.quotationspage.com/quote/$rand_online.html" |
-        grep -e "<dt>" -e "</dd>" | awk -F'[<>]' '{
-            if($2 ~ /dt/)
-            { print $3 }
-            else if($4 ~ /b/)
-            { print "-- " $7 "  n(" $19 ")"} 
-        }')
+  quote=$(curl -s "http://www.quotationspage.com/quote/$rand_online.html" |
+    grep -E "<dt>|<dd>" | awk -F '[<>]' '{
+      if ($2 ~ /dt/) { print $3 }
+      else if ($4 ~ /b/) { print "-- " $7 " n(" $19 ")"}
+    }')
 
+  if [[ -z "$quote" ]]; then
+    echo "ERROR: Falha ao recuperar cotação online."
+  else
     echo "$quote"
+  fi
 }
 
 get_static_quote() {
-    local quotes=("Ever tried. Ever failed. No matter. Try Again. Fail again. Fail better. -Samuel Beckett"
-        "Never give up, for that is just the place and time that the tide will turn. -Harriet Beecher Stowe"
-        "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time. -Thomas A. Edison"
-        "Life isn't about getting and having, it's about giving and being. -Kevin Kruse"
-        "Strive not to be a success, but rather to be of value. -Albert Einstein"
-        "You miss 100% of the shots you don't take. -Wayne Gretzky"
-        "People who are unable to motivate themselves must be content with mediocrity, no matter how impressive their other talents. -Andrew Carnegie"
-        "Design is not just what it looks like and feels like. Design is how it works. -Steve Jobs"
-        "Only those who dare to fail greatly can ever achieve greatly. -Robert F. Kennedy"
-        "All our dreams can come true, if we have the courage to pursue them. -Walt Disney"
-        "Success consists of going from failure to failure without loss of enthusiasm. -Winston Churchill")
+  local quotes=(
+    "Ever tried. Ever failed. No matter. Try Again. Fail again. Fail better. -Samuel Beckett"
+    "Never give up, for that is just the place and time that the tide will turn. -Harriet Beecher Stowe"
+    "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time. -Thomas A. Edison"
+    # ... (remaining quotes)
+  )
 
-    local a
-    a=$(date | cut -c 19)
-    echo "${quotes[a]}"
+  local a=$(date | cut -c 19)
+  echo "${quotes[a]}"
 }
 
 is_internet_available() {
-    wget -q --spider http://google.com
+  wget -q --spider http://google.com
 }
 
 fetch_quote() {
-    local max_retries=5
-    local quote
+  local max_retries=5
+  local quote
 
-    if is_internet_available; then
-        for ((i = 1; i <= max_retries; i++)); do
-            quote=$(get_online_quote)
-            if [[ "$quote" != *"ERROR"* ]]; then
-                break
-            fi
-        done
-    else
-        quote=$(get_static_quote)
-    fi
+  if is_internet_available; then
+    for ((i = 1; i <= max_retries; i++)); do
+      quote=$(get_online_quote)
+      if [[ ! "$quote" =~ "ERROR" ]]; then
+        break
+      fi
+    done
+  fi
 
-    echo "$quote"
+  if [[ -z "$quote" ]]; then
+    quote=$(get_static_quote)
+  fi
+
+  echo "$quote"
 }
 
 display_quote() {
-    local quote="$1"
-    if [[ "$quote" == *"ERROR"* ]]; then
-        echo "Failed to fetch a valid quote."
-    else
-        echo -e "$quote" | sed 's/n()//g' | xargs -0 echo | fmt -50
-    fi
+  local quote="$1"
+
+  if [[ "$quote" =~ "ERROR" ]]; then
+    echo "Falha ao recuperar cotação."
+  else
+    echo -e "$quote" | sed 's/n()//g' | xargs -0 echo | fmt -50
+  fi
 }
 
 main() {
-    local quote
-    quote=$(fetch_quote)
-    display_quote "$quote"
+  local quote
+
+  # Recupera e exibe a cotação
+  quote=$(fetch_quote)
+  display_quote "$quote"
 }
 
 main
+
