@@ -14,6 +14,7 @@ Required:
   - curl
   - sed
   - sensors
+  - fmt
 
 Weather:
 - find your city_id on `wttr.in` and add into `wheater`
